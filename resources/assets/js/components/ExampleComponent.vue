@@ -1,12 +1,15 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-default">
+                    <div class="card-header">Example Component</div>
 
-                    <div class="panel-body">
-                        I'm an example component!
+                    <div class="card-body">
+                        <ul>
+                            <li>test</li>
+                            <li v-for="name in names" :key="name">{{ name }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -16,8 +19,18 @@
 
 <script>
     export default {
+        data () {
+            return {
+                names: []
+            }
+        },
         mounted() {
-            console.log('Component mounted.')
+            let that = this;
+            // 12. 创建 Echo 监听
+            Echo.channel('rss')
+                .listen('RssCreatedEvent', (e) => {
+                    that.names.push(e.name)
+                });
         }
     }
 </script>
